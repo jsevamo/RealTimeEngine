@@ -8,10 +8,18 @@ import math
 
 vertices = np.array(
     [
-        [0.5, 0, 0],
-        [0.1, 0, 0]
+        [-0.5, -0.5, -0.5],
+        [0.5, -0.5, -0.5],
+        [0.5, 0.5, -0.5],
+        [-0.5, 0.5, -0.5],
+        [-0.5, -0.5, 0.5],
+        [0.5, -0.5, 0.5],
+        [0.5, 0.5, 0.5],
+        [-0.5, 0.5, 0.5]
     ]
 )
+
+print(type(vertices))
 
 
 def RotateX(M, angle):
@@ -47,11 +55,30 @@ def RotateZ(M, angle):
     return M.dot(rotation)
 
 
+def ProjectOrtho(M):
+
+    M = np.atleast_2d(M)
+
+    projection = np.array(
+        [
+            [1, 0, 0],
+            [0, 1, 0]
+        ]
+    )
+
+    return M.dot(projection.T)
+
+
+
+
 def DrawPoints(angle):
     glBegin(GL_POINTS)
     for vertex in vertices:
-        v = RotateZ(vertex, angle)
-        glVertex3f(v[0], v[1], v[2])
+        v = RotateX(vertex.transpose(), angle)
+        v = RotateY(v, angle)
+        v = RotateZ(v, angle)
+        v = ProjectOrtho(v)
+        glVertex2f(v[0][0], v[0][1])
     glEnd()
 
 
@@ -77,7 +104,7 @@ def main():
         pygame.display.flip()
         pygame.time.wait(10)
 
-        angle = angle+0.01
+        angle = angle + 0.01
 
 
 main()
