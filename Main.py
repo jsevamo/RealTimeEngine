@@ -7,7 +7,7 @@ import numpy as np
 import math
 
 
-a_file = open("Cube.obj")
+a_file = open("CubeTriangulated.obj")
 lines = a_file.readlines()
 
 
@@ -22,7 +22,7 @@ def OpenObj():
                         vertex = line.replace('v', '')
                         val = vertex.split()
                         ListOfVertices.append(np.array([float(val[0]), float(val[1]), float(val[2])]))
-
+    print(val[0])
     return np.asarray(ListOfVertices)
 
 
@@ -36,13 +36,14 @@ def FacesOfObj():
                 edge = line.replace('f', '')
                 edges = edge.split()
                 # print(edges[1][0])
-                ListOfFaces.append(np.array([int(edges[0][0]), int(edges[1][0]), int(edges[2][0]), int(edges[3][0])]))
-
+                ListOfFaces.append(np.array([int(edges[0][0]), int(edges[1][0]), int(edges[2][0])]))
+    print(edges[0][0])
     return np.asarray(ListOfFaces)
 
 
 vertices = OpenObj()
-print(FacesOfObj()[0])
+faces = FacesOfObj()
+#print(len(faces))
 
 
 def RotateX(M, angle):
@@ -101,10 +102,17 @@ def DrawPoints(angle):
         glVertex2f(v[0][0], v[0][1])
     glEnd()
 
-    glBegin(GL_LINES)
-    glVertex2f(0.5, 0)
-    glVertex2f(1, 1)
-    glEnd()
+    #for face in faces:
+    #    glBegin(GL_LINES)
+    #    glVertex2f(0.1, 0)
+    #    glVertex2f(0, 0)
+    #    glEnd()
+
+
+    #glBegin(GL_LINES)
+    #glVertex3f(0, 0, 0)
+    #glVertex3f(0.5, 0.5, -0.5)
+    #glEnd()
 
 
 def main():
