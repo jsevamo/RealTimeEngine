@@ -20,7 +20,7 @@ class Vertex:
 def OpenObj():
     ListOfVertices = []
 
-    a_file = open("Cube.obj")
+    a_file = open("Sphere.obj")
     lines = a_file.readlines()
 
     for line in lines:
@@ -30,25 +30,14 @@ def OpenObj():
                     if 'Blender' not in line:
                         vertex = line.replace('v', '')
                         val = vertex.split()
-                        ListOfVertices.append(Vertex(float(val[0]), float(val[1]), float(val[2])))
+                        ListOfVertices.append(np.array([float(val[0]), float(val[1]), float(val[2])]))
 
-    return ListOfVertices
+    return np.asarray(ListOfVertices)
 
 
-OpenObj()
+vertices = OpenObj()
 
-vertices = np.array(
-    [
-        [-0.5, -0.5, -0.5],
-        [0.5, -0.5, -0.5],
-        [0.5, 0.5, -0.5],
-        [-0.5, 0.5, -0.5],
-        [-0.5, -0.5, 0.5],
-        [0.5, -0.5, 0.5],
-        [0.5, 0.5, 0.5],
-        [-0.5, 0.5, 0.5]
-    ]
-)
+
 
 
 def RotateX(M, angle):
@@ -89,8 +78,8 @@ def ProjectOrtho(M):
 
     projection = np.array(
         [
-            [1, 0, 0],
-            [0, 1, 0]
+            [1/5, 0, 0],
+            [0, 1/5, 0]
         ]
     )
 
@@ -101,8 +90,8 @@ def DrawPoints(angle):
     glBegin(GL_POINTS)
     for vertex in vertices:
         v = RotateX(vertex, angle)
-        v = RotateY(v, angle)
-        v = RotateZ(v, angle)
+        #v = RotateY(v, angle)
+        #v = RotateZ(v, angle)
         v = ProjectOrtho(v)
         glVertex2f(v[0][0], v[0][1])
     glEnd()
@@ -110,7 +99,8 @@ def DrawPoints(angle):
 
 def main():
     pygame.init()
-    display = (800, 600)
+    pygame.display.set_caption('Maya But Actually Good V.001Alpha')
+    display = (600, 600)
     pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
 
     angle = 0
