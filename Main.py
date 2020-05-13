@@ -6,6 +6,8 @@ from OpenGL.GLU import *
 import numpy as np
 import math
 
+
+
 vertices = np.array(
     [
         [-0.5, -0.5, -0.5],
@@ -56,7 +58,6 @@ def RotateZ(M, angle):
 
 
 def ProjectOrtho(M):
-
     M = np.atleast_2d(M)
 
     projection = np.array(
@@ -69,12 +70,10 @@ def ProjectOrtho(M):
     return M.dot(projection.T)
 
 
-
-
 def DrawPoints(angle):
     glBegin(GL_POINTS)
     for vertex in vertices:
-        v = RotateX(vertex.transpose(), angle)
+        v = RotateX(vertex, angle)
         v = RotateY(v, angle)
         v = RotateZ(v, angle)
         v = ProjectOrtho(v)
