@@ -12,13 +12,24 @@ vertices = np.array(
     ]
 )
 
-print(vertices)
+
+def Rotate(M):
+    rotation = np.array(
+        [
+            [0, -1, 0],
+            [1, 0, 0],
+            [0, 0, 1]
+        ]
+    )
+    return M.dot(rotation)
+
 
 
 def DrawPoints():
     glBegin(GL_POINTS)
     for vertex in vertices:
-        glVertex3f(vertex[0], vertex[1], vertex[2])
+        v = Rotate(vertex)
+        glVertex3f(v[0], v[1], v[2])
     glEnd()
 
 
@@ -38,8 +49,6 @@ def main():
         # Draw functions here
 
         DrawPoints()
-
-
 
         pygame.display.flip()
         pygame.time.wait(10)
