@@ -7,21 +7,12 @@ import numpy as np
 import math
 
 
-class Vertex:
-    def __init__(self, _x, _y, _z):
-        self.x = _x
-        self.y = _y
-        self.z = _z
-
-    def PrintToConsole(self):
-        print("[" + str(self.x) + ", " + str(self.y) + ", " + str(self.z) + "]")
+a_file = open("Cube.obj")
+lines = a_file.readlines()
 
 
 def OpenObj():
     ListOfVertices = []
-
-    a_file = open("Sphere.obj")
-    lines = a_file.readlines()
 
     for line in lines:
         if 'v' in line:
@@ -35,9 +26,23 @@ def OpenObj():
     return np.asarray(ListOfVertices)
 
 
+def FacesOfObj():
+
+    ListOfFaces = []
+
+    for line in lines:
+        if 'f' in line:
+            if 's' not in line:
+                edge = line.replace('f', '')
+                edges = edge.split()
+                # print(edges[1][0])
+                ListOfFaces.append(np.array([int(edges[0][0]), int(edges[1][0]), int(edges[2][0]), int(edges[3][0])]))
+
+    return np.asarray(ListOfFaces)
+
+
 vertices = OpenObj()
-
-
+print(FacesOfObj()[0])
 
 
 def RotateX(M, angle):
@@ -78,8 +83,8 @@ def ProjectOrtho(M):
 
     projection = np.array(
         [
-            [1/5, 0, 0],
-            [0, 1/5, 0]
+            [1 / 5, 0, 0],
+            [0, 1 / 5, 0]
         ]
     )
 
@@ -90,10 +95,15 @@ def DrawPoints(angle):
     glBegin(GL_POINTS)
     for vertex in vertices:
         v = RotateX(vertex, angle)
-        #v = RotateY(v, angle)
-        #v = RotateZ(v, angle)
+        v = RotateY(v, angle)
+        v = RotateZ(v, angle)
         v = ProjectOrtho(v)
         glVertex2f(v[0][0], v[0][1])
+    glEnd()
+
+    glBegin(GL_LINES)
+    glVertex2f(0.5, 0)
+    glVertex2f(1, 1)
     glEnd()
 
 
