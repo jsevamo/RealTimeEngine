@@ -7,6 +7,35 @@ import numpy as np
 import math
 
 
+class Vertex:
+    def __init__(self, _x, _y, _z):
+        self.x = _x
+        self.y = _y
+        self.z = _z
+
+    def PrintToConsole(self):
+        print("[" + str(self.x) + ", " + str(self.y) + ", " + str(self.z) + "]")
+
+
+def OpenObj():
+    ListOfVertices = []
+
+    a_file = open("Cube.obj")
+    lines = a_file.readlines()
+
+    for line in lines:
+        if 'v' in line:
+            if 'vt' not in line:
+                if 'vn' not in line:
+                    if 'Blender' not in line:
+                        vertex = line.replace('v', '')
+                        val = vertex.split()
+                        ListOfVertices.append(Vertex(float(val[0]), float(val[1]), float(val[2])))
+
+    return ListOfVertices
+
+
+OpenObj()
 
 vertices = np.array(
     [
@@ -20,8 +49,6 @@ vertices = np.array(
         [-0.5, 0.5, 0.5]
     ]
 )
-
-print(type(vertices))
 
 
 def RotateX(M, angle):
