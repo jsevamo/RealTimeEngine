@@ -6,7 +6,7 @@ from OpenGL.GLU import *
 import numpy as np
 import math
 
-a_file = open("Cube.obj")
+a_file = open("C2.obj")
 lines = a_file.readlines()
 
 
@@ -34,16 +34,19 @@ def FacesOfObj():
                 edge = line.replace('f', '')
                 edges = edge.split()
                 # print(edges[1][0])
-                ListOfFaces.append(np.array([int(edges[0][0])-1, int(edges[1][0])-1, int(edges[2][0])-1]))
+                ListOfFaces.append(np.array([int(edges[0][0]) - 1, int(edges[1][0]) - 1, int(edges[2][0]) - 1]))
 
     return np.asarray(ListOfFaces)
 
 
 vertices = OpenObj()
 faces = FacesOfObj()
+print(faces)
 
-print(vertices[1][2])
-print(faces[0])
+print("-----------")
+
+print(len(faces))
+
 
 
 def RotateX(M, angle):
@@ -105,23 +108,12 @@ def DrawPoints(angle):
     glEnd()
 
     transformedVertices = np.asarray(NTransformedVertices)
-    # print(transformedVertices[1][0][0])
 
+    glBegin(GL_LINE_LOOP)
+    for i in range(len(faces)):
 
-    # for face in faces:
-    #    glBegin(GL_LINES)
-    #    glVertex2f(0.1, 0)
-    #    glVertex2f(0, 0)
-    #    glEnd()
-
-    glBegin(GL_LINES)
-    glVertex2f(transformedVertices[1][0][0], transformedVertices[1][0][1])
-    glVertex2f(transformedVertices[2][0][0], transformedVertices[2][0][1])
-    glEnd()
-
-    glBegin(GL_LINES)
-    glVertex2f(transformedVertices[2][0][0], transformedVertices[2][0][1])
-    glVertex2f(transformedVertices[0][0][0], transformedVertices[0][0][1])
+        for j in range(len(faces[i])):
+            glVertex2f(transformedVertices[faces[i][j]][0][0], transformedVertices[faces[i][j]][0][1])
     glEnd()
 
 
